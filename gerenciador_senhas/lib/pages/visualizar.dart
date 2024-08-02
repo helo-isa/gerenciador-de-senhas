@@ -98,6 +98,37 @@ class _visualizarState extends State<visualizar> {
                   onPressed: () {},
                 ),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 20, 0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(100, 35),
+                        backgroundColor: Colors.blue[300]),
+                    child: const Text(
+                      "Editar",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(100, 35),
+                        backgroundColor: Colors.blue[300]),
+                    child: const Text(
+                      "Excluir",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         ),

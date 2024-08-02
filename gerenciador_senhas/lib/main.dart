@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_senhas/model/sa.dart';
+import 'package:gerenciador_senhas/pages/new.dart';
 
 import 'pages/visualizar.dart';
 
@@ -11,7 +12,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: PasswordManager(),
       home: login(),
       debugShowCheckedModeBanner: false,
     );
@@ -28,22 +28,24 @@ class _loginState extends State<login> {
 
   TextEditingController pwd = TextEditingController();
 
+  Map c_login = {"default": "1"};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Login")),
+        title: const Center(child: Text("Login")),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(60, 200, 60, 20),
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0, 40, 0, 20),
+              margin: const EdgeInsets.fromLTRB(0, 40, 0, 20),
               child: TextField(
                   controller: user,
                   decoration: InputDecoration(
-                      label: Text("Digite seu nome de Usuario"),
+                      label: const Text("Digite seu nome de Usuario"),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
@@ -51,24 +53,55 @@ class _loginState extends State<login> {
             ),
             TextField(
                 controller: pwd,
+                obscureText: true,
                 decoration: InputDecoration(
-                    label: Text("Digite sua Senha"),
+                    label: const Text("Digite sua Senha"),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
                             const BorderSide(color: Colors.black, width: 4)))),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      fixedSize: Size(100, 35),
+                      fixedSize: const Size(100, 35),
                       backgroundColor: Colors.blue[300]),
-                  onPressed: () {},
-                  child: Container(
-                    child: Text(
-                      "Entrar",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  onPressed: () {
+                    if (user.text != "" && pwd.text != "") {
+                      if (c_login.containsKey(user.text)) {
+                        if (c_login[user.text] == pwd.text) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PasswordManager(),
+                              ));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Senha incorreta para o usuário ${user.text}'),
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('Usuário ${user.text} não encontrado'),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Preencha todos os campos'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text(
+                    "Entrar",
+                    style: TextStyle(color: Colors.white),
                   )),
             )
           ],
@@ -78,7 +111,12 @@ class _loginState extends State<login> {
   }
 }
 
-class PasswordManager extends StatelessWidget {
+class PasswordManager extends StatefulWidget {
+  @override
+  State<PasswordManager> createState() => _PasswordManagerState();
+}
+
+class _PasswordManagerState extends State<PasswordManager> {
   final List<Map> sites = [
     SiteApp(
             id: 1,
@@ -93,6 +131,7 @@ class PasswordManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             child: const Text('Gerenciador de Senhas')),
@@ -102,7 +141,13 @@ class PasswordManager extends StatelessWidget {
             child: IconButton(
               iconSize: 40,
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => add_new_sa(),
+                    ));
+              },
             ),
           ),
         ],
@@ -118,7 +163,7 @@ class PasswordManager extends StatelessWidget {
                   'Sites e Apps',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Container(
+                SizedBox(
                   width: 200,
                   child: TextField(
                     decoration: InputDecoration(
