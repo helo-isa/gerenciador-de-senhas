@@ -11,70 +11,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: PasswordManager(),
-      home: login(),
+      home: PasswordManager(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class login extends StatefulWidget {
-  @override
-  State<login> createState() => _loginState();
-}
-
-class _loginState extends State<login> {
-  TextEditingController user = TextEditingController();
-
-  TextEditingController pwd = TextEditingController();
-
+class login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("Login")),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(60, 200, 60, 20),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 40, 0, 20),
-              child: TextField(
-                  controller: user,
-                  decoration: InputDecoration(
-                      label: Text("Digite seu nome de Usuario"),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(
-                              color: Colors.black, width: 4)))),
-            ),
-            TextField(
-                controller: pwd,
-                decoration: InputDecoration(
-                    label: Text("Digite sua Senha"),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide:
-                            const BorderSide(color: Colors.black, width: 4)))),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: Size(100, 35),
-                      backgroundColor: Colors.blue[300]),
-                  onPressed: () {},
-                  child: Container(
-                    child: Text(
-                      "Entrar",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )),
-            )
-          ],
-        ),
-      ),
-    );
+    return Scaffold();
   }
 }
 
