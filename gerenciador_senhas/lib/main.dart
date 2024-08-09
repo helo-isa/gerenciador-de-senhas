@@ -1,10 +1,19 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:gerenciador_senhas/database/db.dart';
+import 'package:gerenciador_senhas/database/dao/dao.dart';
 import 'package:gerenciador_senhas/model/sa.dart';
 import 'package:gerenciador_senhas/pages/new.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'pages/visualizar.dart';
 
-void main() {
+void main() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    sqfliteFfiInit();
+  }
+  databaseFactory = databaseFactoryFfi;
+  debugPrint((await findall()).toString());
+
   runApp(MyApp());
 }
 
@@ -12,7 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: login(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => login(),
+        '/main': (context) => PasswordManager(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
@@ -117,16 +130,6 @@ class PasswordManager extends StatefulWidget {
 }
 
 class _PasswordManagerState extends State<PasswordManager> {
-  final List<Map> sites = [
-    SiteApp(
-            id: 1,
-            user: "Heitor",
-            password: '1111110',
-            url: 'gov.com.br',
-            obs: null)
-        .toMap()
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +149,9 @@ class _PasswordManagerState extends State<PasswordManager> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => add_new_sa(),
-                    ));
+                    )).then((value) {
+                  setState(() {});
+                });
               },
             ),
           ),
@@ -179,25 +184,54 @@ class _PasswordManagerState extends State<PasswordManager> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemCount: sites.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(color: Colors.black, width: 1))),
-                    child: ListTile(
-                        title: Text(sites[index]["url"]),
-                        trailing: const Icon(Icons.arrow_forward),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    visualizar(item: sites[index]),
-                              ));
-                        }),
-                  );
+              child: FutureBuilder(
+                initialData: [],
+                future: findall(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return const Center(
+                        child: Text(
+                            'Houve um erro de conexão com o banco de dados'),
+                      );
+                    case ConnectionState.waiting:
+                    // fez a requisição e estou esperando a resposta
+                    case ConnectionState.active:
+                      // active mostra que a conexão com o banco foi bem sucedida
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+
+                    case ConnectionState.done:
+                      // o que mostro na tela quando a conexão terminar
+                      List<Map> sites = snapshot.data as List<Map>;
+                      return ListView.builder(
+                        itemCount: sites.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, width: 1))),
+                            child: ListTile(
+                              title: Text(sites[index]["url"]),
+                              trailing: const Icon(Icons.arrow_forward),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        visualizar(item: sites[index]),
+                                  ),
+                                ).then((value) {
+                                  setState(() {});
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      );
+                  }
                 },
               ),
             ),

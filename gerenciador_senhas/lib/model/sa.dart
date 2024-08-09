@@ -1,22 +1,28 @@
 class SiteApp {
-  final int id;
+  final int? id;
   final String user;
   final String url;
   final String password;
   String? obs;
 
   SiteApp(
-      {required this.id,
+      {this.id,
       required this.user,
       required this.url,
       required this.password,
       this.obs});
   Map<String, Object?> toMap() {
-    return {'id ': id, 'user': user, 'url': url, 'password': password};
+    return {
+      'id': id,
+      'user': user,
+      'url': url,
+      'password': password,
+      'obs': obs
+    };
   }
 
   @override
   String toString() {
-    return 'Site/App{ID: $id, url: $url, user: $user, password: $password}';
+    return 'Site/App{ID: $id, url: $url, user: $user, password: $password, obs: $obs}';
   }
 }

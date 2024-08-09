@@ -1,47 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gerenciador_senhas/database/dao/dao.dart';
-import 'dart:math';
-
 import 'package:gerenciador_senhas/model/sa.dart';
+import 'package:gerenciador_senhas/pages/new.dart';
+import 'package:gerenciador_senhas/pages/visualizar.dart';
 
-String generateRandomString() {
-  const String letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  String allChars =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  var random = Random();
+class edit extends StatefulWidget {
+  final Map item;
+  edit({required this.item});
+  @override
+  State<edit> createState() => _editState();
+}
 
-  String randomString = letters[random.nextInt(letters.length)].toString();
+class _editState extends State<edit> {
+  late TextEditingController url;
+  late TextEditingController user;
+  late TextEditingController pwd;
+  late TextEditingController obs;
 
-  for (int i = 1; i < 8; i++) {
-    randomString += allChars[random.nextInt(allChars.length)].toString();
+  @override
+  void initState() {
+    super.initState();
+    // Inicialize os controladores com os valores do item
+    url = TextEditingController(text: widget.item['url']);
+    user = TextEditingController(text: widget.item['user']);
+    pwd = TextEditingController(text: widget.item['password']);
+    obs = TextEditingController(text: widget.item['obs'] ?? '');
   }
 
-  List<int> charCodes = List.from(randomString.codeUnits);
-  charCodes.shuffle(random);
-
-  return randomString;
-}
-
-class add_new_sa extends StatefulWidget {
-  @override
-  State<add_new_sa> createState() => _add_new_saState();
-}
-
-class _add_new_saState extends State<add_new_sa> {
-  TextEditingController url = TextEditingController();
-
-  TextEditingController user = TextEditingController();
-
-  TextEditingController pwd = TextEditingController();
-
-  TextEditingController obs = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
     generateRandomString();
     return Scaffold(
-      appBar: AppBar(title: const Text("Cadastrando novo Site/App")),
+      appBar: AppBar(title: const Text("Editando o Site/App")),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(50, 10, 50, 20),
         child: Column(
@@ -111,18 +100,19 @@ class _add_new_saState extends State<add_new_sa> {
                     );
                   } else {
                     insertSA(SiteApp(
+                        id: widget.item['id'],
                         user: user.text,
                         url: url.text,
                         password: pwd.text,
                         obs: obs.text));
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/main');
                   }
                 },
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(120, 35),
                     backgroundColor: Colors.blue[300]),
                 child: const Text(
-                  "Cadastrar",
+                  "Salvar",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
