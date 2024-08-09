@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gerenciador_senhas/database/dao/dao.dart';
-import 'package:gerenciador_senhas/main.dart';
 import 'package:gerenciador_senhas/pages/edit.dart';
 
 class visualizar extends StatefulWidget {

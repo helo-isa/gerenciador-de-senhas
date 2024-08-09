@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_senhas/database/dao/dao.dart';
 import 'package:gerenciador_senhas/model/sa.dart';
 import 'package:gerenciador_senhas/pages/new.dart';
-import 'package:gerenciador_senhas/pages/visualizar.dart';
 
 class edit extends StatefulWidget {
   final Map item;
