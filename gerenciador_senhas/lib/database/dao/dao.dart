@@ -9,9 +9,9 @@ Future<int> insertSA(SiteApp siteApp) async {
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
 
-Future<List<Map<String, dynamic>>> findall() async {
+Future<List<Map<String, dynamic>>> findall(String table) async {
   Database db = await getDatabase();
-  List<Map<String, dynamic>> dados = await db.query('SA');
+  List<Map<String, dynamic>> dados = await db.query(table);
   return dados;
 }
 
@@ -24,4 +24,14 @@ Future<int> deleteById(int id) async {
 Future<int> deleteAll() async {
   Database db = await getDatabase();
   return db.delete('SA');
+}
+
+Future<int> insertAesKey(String aesKey) async {
+  Database db = await getDatabase();
+
+  Map<String, dynamic> chave = {
+    'key': aesKey,
+  };
+  return await db.insert('aesKey', chave,
+      conflictAlgorithm: ConflictAlgorithm.replace);
 }

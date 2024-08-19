@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gerenciador_senhas/database/dao/dao.dart';
+import 'package:gerenciador_senhas/encrypting/aes.dart';
 import 'dart:math';
-
+import 'package:gerenciador_senhas/main.dart';
 import 'package:gerenciador_senhas/model/sa.dart';
 
 String generateRandomString() {
@@ -23,6 +23,12 @@ String generateRandomString() {
   return randomString;
 }
 
+// Future<AESHelper> defAES() async {
+//   return AESHelper((await findall("aesKey"))[0]['key'] as String);
+// }
+
+// AESHelper aesStart = defAES() as AESHelper;
+
 class add_new_sa extends StatefulWidget {
   @override
   State<add_new_sa> createState() => _add_new_saState();
@@ -41,7 +47,14 @@ class _add_new_saState extends State<add_new_sa> {
   Widget build(BuildContext context) {
     generateRandomString();
     return Scaffold(
-      appBar: AppBar(title: const Text("Cadastrando novo Site/App")),
+      appBar: AppBar(
+        title: const Text(
+          "Cadastrando novo Site/App",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 55, 68, 112),
+        toolbarHeight: 100.0,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(50, 10, 50, 20),
         child: Column(
@@ -55,7 +68,8 @@ class _add_new_saState extends State<add_new_sa> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
-                              color: Colors.black, width: 4)))),
+                              color: Color.fromARGB(255, 55, 68, 112),
+                              width: 4)))),
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
@@ -78,7 +92,7 @@ class _add_new_saState extends State<add_new_sa> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.abc),
+                    icon: const Icon(Icons.casino),
                     onPressed: () {
                       setState(() {
                         pwd.text = generateRandomString();
@@ -102,7 +116,7 @@ class _add_new_saState extends State<add_new_sa> {
             Container(
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (pwd.text == '' || user.text == '' || url.text == '') {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -111,16 +125,20 @@ class _add_new_saState extends State<add_new_sa> {
                     );
                   } else {
                     insertSA(SiteApp(
-                        user: user.text,
+                        user: AESHelper(
+                                (await findall("aesKey"))[0]['key'] as String)
+                            .encrypt(user.text),
                         url: url.text,
-                        password: pwd.text,
+                        password: AESHelper(
+                                (await findall("aesKey"))[0]['key'] as String)
+                            .encrypt(pwd.text),
                         obs: obs.text));
                     Navigator.pop(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
                     fixedSize: const Size(120, 35),
-                    backgroundColor: Colors.blue[300]),
+                    backgroundColor: Color.fromARGB(255, 72, 145, 111)),
                 child: const Text(
                   "Cadastrar",
                   style: TextStyle(color: Colors.white),

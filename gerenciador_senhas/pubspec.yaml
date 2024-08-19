@@ -38,7 +38,8 @@ dependencies:
   sqflite: 
   path:
   sqflite_common_ffi: ^2.2.5
-
+  encrypt: ^5.0.0
+  pointycastle: ^3.4.0
 
 dev_dependencies:
   flutter_test:

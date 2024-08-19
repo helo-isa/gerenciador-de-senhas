@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gerenciador_senhas/database/dao/dao.dart';
+import 'package:gerenciador_senhas/encrypting/aes.dart';
+import 'package:gerenciador_senhas/main.dart';
 import 'package:gerenciador_senhas/pages/edit.dart';
 
 class visualizar extends StatefulWidget {
   final Map item;
   bool obscure;
-  visualizar({required this.item, this.obscure = true});
+  final aesStart;
+  visualizar({required this.item, this.obscure = true, required this.aesStart});
 
   @override
   State<visualizar> createState() => _visualizarState();
@@ -15,29 +18,43 @@ class visualizar extends StatefulWidget {
 class _visualizarState extends State<visualizar> {
   @override
   Widget build(BuildContext context) {
+    debugPrint("Meu user: ${widget.item['user']}");
+
+    AESHelper teste = AESHelper(testechaveglobal);
+    String texto = teste.decrypt(widget.item['user'].toString());
+    debugPrint("Decripto: " + texto);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.item['url']),
+        backgroundColor: Color.fromARGB(255, 55, 68, 112),
+        toolbarHeight: 100.0,
+        title: Text(
+          widget.item['url'],
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Container(
         margin: const EdgeInsets.fromLTRB(50, 10, 50, 20),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 2),
+            border:
+                Border.all(color: Color.fromARGB(255, 55, 68, 112), width: 2),
             borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: [
             Container(
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
+                  border: Border.all(
+                      color: Color.fromARGB(255, 55, 68, 112), width: 2),
                   borderRadius: BorderRadius.circular(5)),
               child: ListTile(
                 title: const Text(
                   "Nome de usuário",
-                  style: TextStyle(color: Color.fromARGB(204, 0, 0, 0)),
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 55, 68, 112),
+                      fontWeight: FontWeight.w500),
                 ),
                 subtitle: Text(
-                  widget.item['user'],
+                  widget.aesStart.decrypt(widget.item['user']),
                   style: const TextStyle(
                       color: Color.fromARGB(255, 0, 0, 0), fontSize: 16),
                 ),
@@ -59,7 +76,8 @@ class _visualizarState extends State<visualizar> {
             Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
+                    border: Border.all(
+                        color: Color.fromARGB(255, 55, 68, 112), width: 2),
                     borderRadius: BorderRadius.circular(5)),
                 child: Row(
                   children: [
@@ -72,7 +90,8 @@ class _visualizarState extends State<visualizar> {
                             const Text(
                               "Senha",
                               style: TextStyle(
-                                  color: Color.fromARGB(204, 0, 0, 0)),
+                                  color: Color.fromARGB(255, 55, 68, 112),
+                                  fontWeight: FontWeight.w500),
                             ),
                             TextField(
                               obscureText: widget.obscure,
@@ -117,12 +136,15 @@ class _visualizarState extends State<visualizar> {
             Container(
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
+                  border: Border.all(
+                      color: Color.fromARGB(255, 55, 68, 112), width: 2),
                   borderRadius: BorderRadius.circular(5)),
               child: ListTile(
                 title: const Text(
                   "Observação",
-                  style: TextStyle(color: Color.fromARGB(204, 0, 0, 0)),
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 55, 68, 112),
+                      fontWeight: FontWeight.w500),
                 ),
                 subtitle: Text(
                   (widget.item['obs'] == null ? "" : widget.item['obs']),
@@ -149,7 +171,7 @@ class _visualizarState extends State<visualizar> {
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(100, 35),
-                        backgroundColor: Colors.blue[300]),
+                        backgroundColor: Color.fromARGB(255, 55, 68, 112)),
                     child: const Text(
                       "Editar",
                       style: TextStyle(color: Colors.white),
@@ -165,7 +187,7 @@ class _visualizarState extends State<visualizar> {
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(100, 35),
-                        backgroundColor: Colors.blue[300]),
+                        backgroundColor: Color.fromARGB(255, 209, 66, 56)),
                     child: const Text(
                       "Excluir",
                       style: TextStyle(color: Colors.white),
