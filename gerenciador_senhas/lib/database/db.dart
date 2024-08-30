@@ -2,12 +2,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<void> deleteDatabaseFile() async {
-  String caminhoBanco = join(await getDatabasesPath(), 'SiteasdadAPP.db');
+  String caminhoBanco = join(await getDatabasesPath(), 'bancodnv.db');
   await deleteDatabase(caminhoBanco);
 }
 
 Future<Database> getDatabase() async {
-  String caminhoBanco = join(await getDatabasesPath(), 'SiteasdadAPP.db');
+  String caminhoBanco = join(await getDatabasesPath(), 'bancodnv.db');
 
   return openDatabase(
     caminhoBanco,
@@ -25,6 +25,13 @@ Future<Database> getDatabase() async {
           key TEXT
         )
       ''');
+      await db.execute('''
+        CREATE TABLE hash(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user TEXT,
+          pass TEXT
+        )
+      ''');
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       if (oldVersion < 2) {
@@ -35,6 +42,13 @@ Future<Database> getDatabase() async {
           key TEXT
         )
       ''');
+        await db.execute('''
+          CREATE TABLE hash(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user TEXT,
+            pass TEXT
+          )
+        ''');
       }
     },
   );

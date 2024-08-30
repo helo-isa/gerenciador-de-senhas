@@ -53,11 +53,12 @@ class _add_new_saState extends State<add_new_sa> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color.fromARGB(255, 55, 68, 112),
+        iconTheme: IconThemeData(color: Colors.white),
         toolbarHeight: 100.0,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(50, 10, 50, 20),
-        child: Column(
+        child: ListView(
           children: [
             Container(
               margin: const EdgeInsets.only(top: 50),
@@ -114,7 +115,7 @@ class _add_new_saState extends State<add_new_sa> {
                               color: Colors.black, width: 4)))),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              margin: const EdgeInsets.fromLTRB(80, 20, 80, 0),
               child: ElevatedButton(
                 onPressed: () async {
                   if (pwd.text == '' || user.text == '' || url.text == '') {
@@ -137,7 +138,7 @@ class _add_new_saState extends State<add_new_sa> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(120, 35),
+                    // fixedSize: const Size(5, 35),
                     backgroundColor: Color.fromARGB(255, 72, 145, 111)),
                 child: const Text(
                   "Cadastrar",

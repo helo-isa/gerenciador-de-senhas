@@ -35,3 +35,9 @@ Future<int> insertAesKey(String aesKey) async {
   return await db.insert('aesKey', chave,
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
+
+Future<int> insertHash(String user, String pass) async {
+  Database db = await getDatabase();
+  return db.insert('hash', {"user": user, "pass": pass},
+      conflictAlgorithm: ConflictAlgorithm.replace);
+}
